@@ -91,6 +91,7 @@
     </label>
     <button class="btn" id="btn-start">診断をはじめる</button>
     <p class="note">※本診断は自己申告に基づく簡易診断です。実際の運転技能を評価するものではありません。</p>
+    <p class="note hidden" id="send-note">※診断結果は、実施管理のため全国ペーパードライバー協会へ送信されます。</p>
   </section>
 
   <!-- 質問画面 -->
@@ -214,6 +215,15 @@ function rankOf(total){
 }
 function levelOf(score){ return score>=16 ? 0 : (score>=12 ? 1 : 2); }
 
+// 結果の送信先（GASウェブアプリのURL）。空の間は送信しない
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyrscPxGW9_zs8oKgtg6jG71BVDGlIfQh_o72vhzzAGCFJ2dN1WdjaLXnnOpK0axC8cJw/exec";
+function sendResult(payload){
+  if(!ENDPOINT) return;
+  try{
+    fetch(ENDPOINT, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(payload)}).catch(()=>{});
+  }catch(e){}
+}
+
 let answers = new Array(QUESTIONS.length).fill(null);
 let current = 0;
 
@@ -274,6 +284,7 @@ function renderResult(){
     comments.appendChild(p);
   });
   $("r-overall").textContent = OVERALL[rank];
+  sendResult({kind:"安全運転セルフチェック", company:$("in-company").value.trim(), name:$("in-name").value.trim(), date:$("r-date").textContent, total: total + "点", judge: rank + "（" + judge + "）", scores: scores, answers: answers});
   show("screen-result");
   window.scrollTo(0,0);
 }
@@ -283,6 +294,7 @@ $("btn-retry").onclick = () => { answers = new Array(QUESTIONS.length).fill(null
 // 企業別URL：?company=会社名 で会社名を初期入力
 const params = new URLSearchParams(location.search);
 if(params.get("company")){ $("in-company").value = params.get("company"); }
+if(ENDPOINT){ $("send-note").classList.remove("hidden"); }
 </script>
 </body>
 </html>

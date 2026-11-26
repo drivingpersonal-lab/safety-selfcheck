@@ -64,6 +64,7 @@
     <label class="field">お名前<input type="text" id="in-name" placeholder="例）山田 太郎"></label>
     <button class="btn" id="btn-start">診断をはじめる</button>
     <p class="note">※本診断は自己申告に基づく簡易診断です。実際の運転技能を評価するものではありません。</p>
+    <p class="note hidden" id="send-note">※診断結果は、実施管理のため全国ペーパードライバー協会へ送信されます。</p>
   </section>
 
   <section id="screen-quiz" class="card hidden">
@@ -170,6 +171,14 @@ function overallOf(levels){
   if(worst===2) return "いくつかの観点で改善が必要です。特にレベルの低かった項目は、事故に直結しやすい内容です。日々の運転で意識して改善に取り組みましょう。";
   return "改善が必要な観点が目立ちます。指導員が同乗する実技の運転適性診断や、安全運転講習の受講をおすすめします。";
 }
+// 結果の送信先（GASウェブアプリのURL）。空の間は送信しない
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyrscPxGW9_zs8oKgtg6jG71BVDGlIfQh_o72vhzzAGCFJ2dN1WdjaLXnnOpK0axC8cJw/exec";
+function sendResult(payload){
+  if(!ENDPOINT) return;
+  try{
+    fetch(ENDPOINT, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(payload)}).catch(()=>{});
+  }catch(e){}
+}
 // === DOM ===
 const $ = id => document.getElementById(id);
 function show(id){ ["screen-start","screen-quiz","screen-result"].forEach(s => $(s).classList.toggle("hidden", s!==id)); }
@@ -218,6 +227,7 @@ function renderResult(){
     comments.appendChild(p);
   });
   $("r-overall").textContent = overallOf(levels);
+  sendResult({kind:"セーフティドライブ自己診断", company:$("in-company").value.trim(), name:$("in-name").value.trim(), date:$("r-date").textContent, total:"チェック合計" + counts.reduce((a,b)=>a+b,0) + "件", judge: counts.map((n,i)=>CATEGORIES[i] + "=" + LEVEL_LABEL[i][levels[i]]).join("・"), scores: counts});
   show("screen-result"); window.scrollTo(0,0);
 }
 $("btn-start").onclick = () => { buildList(); show("screen-quiz"); window.scrollTo(0,0); };
@@ -225,6 +235,7 @@ $("btn-result").onclick = renderResult;
 $("btn-retry").onclick = () => { show("screen-start"); window.scrollTo(0,0); };
 const params = new URLSearchParams(location.search);
 if(params.get("company")){ $("in-company").value = params.get("company"); }
+if(ENDPOINT){ $("send-note").classList.remove("hidden"); }
 </script>
 </body>
 </html>

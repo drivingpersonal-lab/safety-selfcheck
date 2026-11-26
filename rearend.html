@@ -74,6 +74,7 @@
     <label class="field">お名前<input type="text" id="in-name" placeholder="例）山田 太郎"></label>
     <button class="btn" id="btn-start">診断をはじめる</button>
     <p class="note">※本診断は自己申告に基づく簡易診断です。実際の運転技能を評価するものではありません。</p>
+    <p class="note hidden" id="send-note">※診断結果は、実施管理のため全国ペーパードライバー協会へ送信されます。</p>
   </section>
 
   <section id="screen-quiz" class="card hidden">
@@ -188,6 +189,14 @@ function overallOf(risk){
   if(risk==="高い") return "危険度が高い状態です。特に車間距離と前方注視は、今日から改める必要があります。実技による運転適性診断の受講もおすすめします。";
   return "危険度が非常に高い状態です。このままでは追突事故を起こす可能性が高いと言えます。運転習慣の根本的な見直しと、専門家による実技診断を強くおすすめします。";
 }
+// 結果の送信先（GASウェブアプリのURL）。空の間は送信しない
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyrscPxGW9_zs8oKgtg6jG71BVDGlIfQh_o72vhzzAGCFJ2dN1WdjaLXnnOpK0axC8cJw/exec";
+function sendResult(payload){
+  if(!ENDPOINT) return;
+  try{
+    fetch(ENDPOINT, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(payload)}).catch(()=>{});
+  }catch(e){}
+}
 // === DOM ===
 let answers = new Array(QUESTIONS.length).fill(null);
 let current = 0;
@@ -237,6 +246,7 @@ function renderResult(){
     comments.appendChild(p);
   });
   $("r-overall").textContent = overallOf(risk);
+  sendResult({kind:"追突事故 危険度診断", company:$("in-company").value.trim(), name:$("in-name").value.trim(), date:$("r-date").textContent, total:"安全スコア" + total, judge:"危険度：" + risk, scores: scores, answers: answers});
   show("screen-result"); window.scrollTo(0,0);
 }
 $("btn-start").onclick = () => { current = 0; show("screen-quiz"); renderQuestion(); };
@@ -244,6 +254,7 @@ $("btn-back").onclick = () => { if(current>0){ current--; renderQuestion(); } };
 $("btn-retry").onclick = () => { answers = new Array(QUESTIONS.length).fill(null); show("screen-start"); window.scrollTo(0,0); };
 const params = new URLSearchParams(location.search);
 if(params.get("company")){ $("in-company").value = params.get("company"); }
+if(ENDPOINT){ $("send-note").classList.remove("hidden"); }
 </script>
 </body>
 </html>
