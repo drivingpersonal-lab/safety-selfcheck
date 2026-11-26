@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>セーフティドライブ自己診断｜全国ペーパードライバー協会</title>
+<style>
+  :root{ --navy:#1f3a5f; --navy-dark:#16293f; --accent:#2e6da4; --bg:#f2f4f7; --ink:#222; --muted:#667; --line:#d5dbe3; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif; background:var(--bg); color:var(--ink); line-height:1.7;}
+  .wrap{max-width:720px; margin:0 auto; padding:16px;}
+  header.site{background:var(--navy); color:#fff; padding:18px 16px; text-align:center;}
+  header.site .org{font-size:13px; letter-spacing:.15em; opacity:.85;}
+  header.site h1{font-size:23px; margin-top:4px; letter-spacing:.05em;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:10px; padding:24px 20px; margin-top:16px; box-shadow:0 1px 3px rgba(0,0,0,.05);}
+  .lead{font-size:15px;}
+  .points{margin:14px 0; padding:12px 14px; background:#eef3f8; border-radius:8px; font-size:14px;}
+  .points li{margin-left:18px;}
+  label.field{display:block; margin-top:14px; font-size:14px; font-weight:bold;}
+  input[type=text]{width:100%; padding:11px 12px; font-size:16px; border:1px solid var(--line); border-radius:8px; margin-top:6px;}
+  .btn{display:block; width:100%; padding:14px; margin-top:20px; background:var(--navy); color:#fff; border:none; border-radius:8px; font-size:17px; font-weight:bold; cursor:pointer;}
+  .btn:hover{background:var(--navy-dark);}
+  .btn.sub{background:#fff; color:var(--navy); border:1px solid var(--navy); font-size:14px; padding:10px;}
+  h3.cat{font-size:16px; margin:20px 0 8px; padding-left:8px; border-left:4px solid var(--navy);}
+  h3.cat:first-of-type{margin-top:6px;}
+  .item{display:flex; gap:10px; align-items:flex-start; padding:9px 10px; border:1px solid var(--line); border-radius:8px; margin-bottom:7px; cursor:pointer; font-size:15px;}
+  .item input{margin-top:5px; transform:scale(1.25);}
+  .item.checked{border-color:var(--accent); background:#f4f8fc;}
+  .sheet{background:#fff; border:1px solid #bbb; padding:28px 26px; margin-top:16px;}
+  .sheet h2{text-align:center; font-size:23px; letter-spacing:.25em; margin-bottom:2px;}
+  .sheet .orgline{text-align:center; font-size:13px; color:#444;}
+  .sheet .kindline{text-align:center; font-size:12px; color:var(--muted); margin-bottom:14px;}
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;}
+  th,td{border:1px solid #999; padding:7px 10px;}
+  th{background:#eef1f5; text-align:left; width:22%;}
+  h3.sec{font-size:15px; margin:16px 0 6px; padding-left:8px; border-left:4px solid var(--navy);}
+  .bar-row{display:flex; align-items:center; gap:10px; margin:7px 0; font-size:14px;}
+  .bar-row .name{width:150px; font-weight:bold; flex-shrink:0;}
+  .bar-row .bar{flex:1; height:14px; background:#e3e8ee; border-radius:3px; overflow:hidden;}
+  .bar-row .bar > div{height:100%; background:var(--accent);}
+  .bar-row .score{width:110px; text-align:right; flex-shrink:0;}
+  .comment-item{font-size:14px; margin-bottom:8px;}
+  .comment-item b{color:var(--navy);}
+  .note{font-size:12px; color:var(--muted); margin-top:14px;}
+  .hidden{display:none;}
+  @media print{ body{background:#fff;} header.site,.noprint{display:none !important;} .wrap{max-width:none; padding:0;} .sheet{border:none; margin:0; padding:10px;} }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="org">全国ペーパードライバー協会</div>
+  <h1>セーフティドライブ自己診断</h1>
+</header>
+<div class="wrap">
+
+  <section id="screen-start" class="card">
+    <p class="lead">44の文を読んで、ご自身に当てはまるものにチェックを入れてください。安全運転知識度、事故の危険度、自己コントロール度、他者への配慮度の4つの観点から診断します。</p>
+    <div class="points"><ul>
+      <li>当てはまるものだけにチェックを入れてください（当てはまらなければ空欄のまま）</li>
+      <li>所要時間は約5分です</li>
+      <li>チェックが終わると、その場で診断結果が表示されます</li>
+    </ul></div>
+    <label class="field">会社名<input type="text" id="in-company" placeholder="例）○○株式会社"></label>
+    <label class="field">お名前<input type="text" id="in-name" placeholder="例）山田 太郎"></label>
+    <button class="btn" id="btn-start">診断をはじめる</button>
+    <p class="note">※本診断は自己申告に基づく簡易診断です。実際の運転技能を評価するものではありません。</p>
+  </section>
+
+  <section id="screen-quiz" class="card hidden">
+    <p class="lead">当てはまるものにチェックを入れてください。<span id="q-progress"></span></p>
+    <div id="q-list"></div>
+    <button class="btn" id="btn-result">診断結果を見る</button>
+  </section>
+
+  <section id="screen-result" class="hidden">
+    <div class="sheet">
+      <h2>セーフティドライブ自己診断書</h2>
+      <div class="orgline">全国ペーパードライバー協会</div>
+      <div class="kindline">（Web診断「セーフティドライブ自己診断」結果）</div>
+      <h3 class="sec">基本情報</h3>
+      <table>
+        <tr><th>会社名</th><td id="r-company">―</td><th>受講日</th><td id="r-date">―</td></tr>
+        <tr><th>氏名</th><td id="r-name">―</td><th>診断方法</th><td>Web自己申告（44項目）</td></tr>
+      </table>
+      <h3 class="sec">診断結果（チェックが少ないほど良好です）</h3>
+      <div id="r-bars"></div>
+      <h3 class="sec">項目別コメント</h3>
+      <div id="r-comments"></div>
+      <h3 class="sec">総合コメント</h3>
+      <p class="comment-item" id="r-overall"></p>
+      <p class="note">※本診断書は、自己申告の回答に基づく簡易な傾向診断です。実際の運転技能の評価には、指導員が同乗する実技の安全運転スキル診断をご利用ください。</p>
+    </div>
+    <div class="noprint">
+      <button class="btn" onclick="window.print()">この診断書を印刷する</button>
+      <button class="btn sub" id="btn-retry">もう一度受ける</button>
+    </div>
+  </section>
+
+</div>
+<script>
+const CATEGORIES = ["安全運転知識度","事故の危険度","自己コントロール度","他者への配慮度"];
+const ITEMS = [
+  // 安全運転知識度（知識の不足）
+  "信号のない交差点での優先関係のルールを、正確に説明できない",
+  "高速道路での合流の仕方に、自信がない",
+  "雨の日の制動距離が、晴れた日の何倍くらいになるか知らない",
+  "一時停止と徐行の違いを、正確に説明できない",
+  "標識の意味が分からないものが、ときどきある",
+  "右折時の「内輪差」が事故にどう関係するか、よく知らない",
+  "夜間にハイビームへ切り替えるべき場面を、よく知らない",
+  "車の死角がどこにできるか、具体的にイメージできない",
+  "飲酒運転の罰則や、翌日に残るアルコールの影響をよく知らない",
+  "あおり運転を受けたときの正しい対処法を知らない",
+  "免許更新のときに習った内容を、ほとんど覚えていない",
+  // 事故の危険度
+  "車間距離が詰まっていると感じることが、よくある",
+  "黄色信号で、止まらずに進んでしまうことがある",
+  "運転中にスマートフォンを見てしまうことがある",
+  "疲れているのに、運転を続けてしまうことがある",
+  "住宅街でも、つい速度が出てしまう",
+  "一時停止で、完全に止まらずに進むことがある",
+  "車線変更のとき、目視の確認を省略することがある",
+  "雨の日も、晴れた日と同じ感覚で運転している",
+  "急いでいるとき、信号の変わり目で無理をしてしまう",
+  "駐車場で、歩行者の確認がおろそかになることがある",
+  "合流で、無理に割り込んでしまうことがある",
+  // 自己コントロール度
+  "割り込みをされると、イライラしてしまう",
+  "渋滞が続くと、つい車間を詰めてしまう",
+  "後ろの車にあおられると、速度を上げてしまう",
+  "腹が立つと、運転が荒くなる自覚がある",
+  "急いでいるとき、確認が雑になる",
+  "同乗者に話しかけられると、運転への集中が切れる",
+  "ヒヤッとした後も、気持ちを引きずってしまう",
+  "運転中に仕事や家庭の心配ごとを考えてしまう",
+  "眠気を感じても、休憩せずに運転を続けることがある",
+  "イライラすると、クラクションを鳴らしてしまうことがある",
+  "感情が高ぶったまま、車を発進させてしまうことがある",
+  // 他者への配慮度
+  "横断歩道の近くで、歩行者がいても止まらないことがある",
+  "自転車を追い越すとき、間隔が近くなってしまうことがある",
+  "対向車が困っていても、道を譲る余裕がないことが多い",
+  "合流してくる車を、入れてあげないことがある",
+  "歩行者の多い場所でも、速度を落とさないことがある",
+  "高齢のドライバーや初心者マークの車に、イライラしてしまう",
+  "同乗者が不安に感じていないか、気にしたことがない",
+  "夜間、対向車に配慮したハイビームの切り替えを忘れることがある",
+  "水たまりを、歩行者に水がかかるかもしれない速度で通ることがある",
+  "駐車場で、隣の車や歩行者への配慮が足りないと感じることがある",
+  "クラクションを、注意喚起以外（催促や抗議）で使うことがある"
+];
+// レベル判定：チェック数 0-2=0(良好) 3-5=1 6-8=2 9-11=3
+function levelOf(checked){ return checked<=2 ? 0 : checked<=5 ? 1 : checked<=8 ? 2 : 3; }
+const LEVEL_LABEL = [
+  ["高い","普通","やや低い","低い"],
+  ["低い","やや高い","高い","非常に高い"],
+  ["高い","普通","やや低い","低い"],
+  ["高い","普通","やや低い","低い"]
+];
+const COMMENTS = [
+  ["交通ルールの知識がしっかり身についています。","知識に少し曖昧な部分があります。優先関係や標識など、曖昧な項目を確認しておきましょう。","知識の不足が見られます。ルールの再確認をおすすめします。","知識の不足が目立ちます。事故の多くは「知らなかった」から起こります。基本ルールの学び直しを強くおすすめします。"],
+  ["事故につながる運転習慣は少ないようです。今の慎重さを保ちましょう。","一部の習慣に危険の芽が見られます。当てはまった項目から意識して直していきましょう。","事故の危険度が高めです。特に車間距離・信号・スマホの項目は、今日から改めましょう。","事故の危険度が非常に高い状態です。運転習慣の根本的な見直しと、実技診断の受講をおすすめします。"],
+  ["感情のコントロールが安定しています。","状況によって感情が運転に出ることがあるようです。急ぐときほど一呼吸おく習慣を。","感情の影響が運転に出やすい傾向があります。イライラしたときは一度停車して切り替えましょう。","感情のコントロールに大きな課題があります。感情が高ぶったときは、車を止めて落ち着いてから運転しましょう。"],
+  ["周囲への配慮が行き届いた運転です。","配慮が足りなくなる場面があるようです。歩行者・自転車・合流車への意識を高めましょう。","他者への配慮が不足しがちです。相手の立場で考える運転を心がけましょう。","他者への配慮に大きな課題があります。思いやり運転は事故防止の基本です。意識の改善に取り組みましょう。"]
+];
+function overallOf(levels){
+  const worst = Math.max.apply(null, levels);
+  if(worst===0) return "総合的に良好な結果です。知識・危険習慣・感情・配慮のすべてで安定しています。今の習慣を継続してください。";
+  if(worst===1) return "概ね良好ですが、一部に改善の余地があります。当てはまった項目を意識するだけでも、安全性は高まります。";
+  if(worst===2) return "いくつかの観点で改善が必要です。特にレベルの低かった項目は、事故に直結しやすい内容です。日々の運転で意識して改善に取り組みましょう。";
+  return "改善が必要な観点が目立ちます。指導員が同乗する実技の運転適性診断や、安全運転講習の受講をおすすめします。";
+}
+// === DOM ===
+const $ = id => document.getElementById(id);
+function show(id){ ["screen-start","screen-quiz","screen-result"].forEach(s => $(s).classList.toggle("hidden", s!==id)); }
+function buildList(){
+  const list = $("q-list"); list.innerHTML = "";
+  CATEGORIES.forEach((cat, ci) => {
+    const h = document.createElement("h3"); h.className = "cat"; h.textContent = cat; list.appendChild(h);
+    for(let i=0;i<11;i++){
+      const idx = ci*11+i;
+      const label = document.createElement("label"); label.className = "item";
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.dataset.idx = idx;
+      cb.onchange = () => { label.classList.toggle("checked", cb.checked); updateProgress(); };
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(ITEMS[idx]));
+      list.appendChild(label);
+    }
+  });
+  updateProgress();
+}
+function updateProgress(){
+  const n = document.querySelectorAll('#q-list input:checked').length;
+  $("q-progress").textContent = "（現在 " + n + " 件チェック）";
+}
+function renderResult(){
+  const counts = [0,0,0,0];
+  document.querySelectorAll('#q-list input:checked').forEach(cb => { counts[Math.floor(Number(cb.dataset.idx)/11)]++; });
+  const levels = counts.map(levelOf);
+  $("r-company").textContent = $("in-company").value.trim() || "―";
+  $("r-name").textContent = $("in-name").value.trim() || "―";
+  const d = new Date();
+  $("r-date").textContent = d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
+  const bars = $("r-bars"); bars.innerHTML = "";
+  counts.forEach((n, i) => {
+    const safe = Math.round((11-n)/11*100);
+    const row = document.createElement("div"); row.className = "bar-row";
+    row.innerHTML = '<span class="name"></span><span class="bar"><div style="width:' + safe + '%"></div></span><span class="score"></span>';
+    row.querySelector(".name").textContent = CATEGORIES[i];
+    row.querySelector(".score").textContent = LEVEL_LABEL[i][levels[i]] + "（" + n + "件）";
+    bars.appendChild(row);
+  });
+  const comments = $("r-comments"); comments.innerHTML = "";
+  counts.forEach((n, i) => {
+    const p = document.createElement("p"); p.className = "comment-item";
+    const b = document.createElement("b"); b.textContent = CATEGORIES[i] + "：";
+    p.appendChild(b); p.appendChild(document.createTextNode(COMMENTS[i][levels[i]]));
+    comments.appendChild(p);
+  });
+  $("r-overall").textContent = overallOf(levels);
+  show("screen-result"); window.scrollTo(0,0);
+}
+$("btn-start").onclick = () => { buildList(); show("screen-quiz"); window.scrollTo(0,0); };
+$("btn-result").onclick = renderResult;
+$("btn-retry").onclick = () => { show("screen-start"); window.scrollTo(0,0); };
+const params = new URLSearchParams(location.search);
+if(params.get("company")){ $("in-company").value = params.get("company"); }
+</script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>追突事故 危険度診断｜全国ペーパードライバー協会</title>
+<style>
+  :root{ --navy:#1f3a5f; --navy-dark:#16293f; --accent:#2e6da4; --bg:#f2f4f7; --ink:#222; --muted:#667; --line:#d5dbe3; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif; background:var(--bg); color:var(--ink); line-height:1.7;}
+  .wrap{max-width:720px; margin:0 auto; padding:16px;}
+  header.site{background:var(--navy); color:#fff; padding:18px 16px; text-align:center;}
+  header.site .org{font-size:13px; letter-spacing:.15em; opacity:.85;}
+  header.site h1{font-size:23px; margin-top:4px; letter-spacing:.05em;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:10px; padding:24px 20px; margin-top:16px; box-shadow:0 1px 3px rgba(0,0,0,.05);}
+  .lead{font-size:15px;}
+  .points{margin:14px 0; padding:12px 14px; background:#eef3f8; border-radius:8px; font-size:14px;}
+  .points li{margin-left:18px;}
+  label.field{display:block; margin-top:14px; font-size:14px; font-weight:bold;}
+  input[type=text]{width:100%; padding:11px 12px; font-size:16px; border:1px solid var(--line); border-radius:8px; margin-top:6px;}
+  .btn{display:block; width:100%; padding:14px; margin-top:20px; background:var(--navy); color:#fff; border:none; border-radius:8px; font-size:17px; font-weight:bold; cursor:pointer;}
+  .btn:hover{background:var(--navy-dark);}
+  .btn.sub{background:#fff; color:var(--navy); border:1px solid var(--navy); font-size:14px; padding:10px;}
+  .progress{height:8px; background:#e3e8ee; border-radius:4px; overflow:hidden; margin-top:6px;}
+  .progress > div{height:100%; background:var(--accent); width:0%; transition:width .3s;}
+  .qmeta{display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-top:14px;}
+  .qcat{color:var(--accent); font-weight:bold;}
+  .qtext{font-size:19px; font-weight:bold; margin:14px 0 18px; line-height:1.6;}
+  .choices{display:grid; gap:10px;}
+  .choice{padding:14px 16px; border:2px solid var(--line); border-radius:8px; background:#fff; font-size:16px; text-align:left; cursor:pointer;}
+  .choice:hover{border-color:var(--accent); background:#f4f8fc;}
+  .backlink{margin-top:14px; text-align:center;}
+  .backlink button{background:none; border:none; color:var(--muted); font-size:14px; cursor:pointer; text-decoration:underline;}
+  .sheet{background:#fff; border:1px solid #bbb; padding:28px 26px; margin-top:16px;}
+  .sheet h2{text-align:center; font-size:23px; letter-spacing:.25em; margin-bottom:2px;}
+  .sheet .orgline{text-align:center; font-size:13px; color:#444;}
+  .sheet .kindline{text-align:center; font-size:12px; color:var(--muted); margin-bottom:14px;}
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;}
+  th,td{border:1px solid #999; padding:7px 10px;}
+  th{background:#eef1f5; text-align:left; width:22%;}
+  .totalbox{display:flex; border:1px solid #999; margin:12px 0;}
+  .totalbox > div{flex:1; text-align:center; padding:10px 4px; border-right:1px solid #999;}
+  .totalbox > div:last-child{border-right:none;}
+  .totalbox .num{font-size:24px; font-weight:bold;}
+  .totalbox .lbl{font-size:12px; color:#555;}
+  h3.sec{font-size:15px; margin:16px 0 6px; padding-left:8px; border-left:4px solid var(--navy);}
+  .bar-row{display:flex; align-items:center; gap:10px; margin:7px 0; font-size:14px;}
+  .bar-row .name{width:120px; font-weight:bold; flex-shrink:0;}
+  .bar-row .bar{flex:1; height:14px; background:#e3e8ee; border-radius:3px; overflow:hidden;}
+  .bar-row .bar > div{height:100%; background:var(--accent);}
+  .bar-row .score{width:64px; text-align:right; flex-shrink:0;}
+  .comment-item{font-size:14px; margin-bottom:8px;}
+  .comment-item b{color:var(--navy);}
+  .note{font-size:12px; color:var(--muted); margin-top:14px;}
+  .hidden{display:none;}
+  @media print{ body{background:#fff;} header.site,.noprint{display:none !important;} .wrap{max-width:none; padding:0;} .sheet{border:none; margin:0; padding:10px;} }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="org">全国ペーパードライバー協会</div>
+  <h1>追突事故 危険度診断</h1>
+</header>
+<div class="wrap">
+
+  <section id="screen-start" class="card">
+    <p class="lead">交通事故の中で最も多いのが追突事故です。40の質問から、あなたの追突事故の危険度を診断します。車間距離、前方注視、速度管理、疲労・体調、悪天候・夜間の5つの要因で評価します。</p>
+    <div class="points"><ul>
+      <li>全40問・4択、所要時間は約5分です</li>
+      <li>普段の運転に一番近い頻度を選んでください</li>
+      <li>回答が終わると、危険度と要因別の評価が表示されます</li>
+    </ul></div>
+    <label class="field">会社名<input type="text" id="in-company" placeholder="例）○○株式会社"></label>
+    <label class="field">お名前<input type="text" id="in-name" placeholder="例）山田 太郎"></label>
+    <button class="btn" id="btn-start">診断をはじめる</button>
+    <p class="note">※本診断は自己申告に基づく簡易診断です。実際の運転技能を評価するものではありません。</p>
+  </section>
+
+  <section id="screen-quiz" class="card hidden">
+    <div class="qmeta"><span id="q-count">1 / 40</span><span>追突事故 危険度診断</span></div>
+    <div class="progress"><div id="q-bar"></div></div>
+    <div class="qmeta"><span class="qcat" id="q-cat"></span><span></span></div>
+    <p class="qtext" id="q-text"></p>
+    <div class="choices" id="q-choices"></div>
+    <div class="backlink"><button id="btn-back">← 前の質問にもどる</button></div>
+  </section>
+
+  <section id="screen-result" class="hidden">
+    <div class="sheet">
+      <h2>追突事故危険度診断書</h2>
+      <div class="orgline">全国ペーパードライバー協会</div>
+      <div class="kindline">（Web診断「追突事故 危険度診断」結果）</div>
+      <h3 class="sec">基本情報</h3>
+      <table>
+        <tr><th>会社名</th><td id="r-company">―</td><th>受講日</th><td id="r-date">―</td></tr>
+        <tr><th>氏名</th><td id="r-name">―</td><th>診断方法</th><td>Web自己申告（40問）</td></tr>
+      </table>
+      <h3 class="sec">総合評価</h3>
+      <div class="totalbox">
+        <div><div class="num" id="r-risk">―</div><div class="lbl">追突事故の危険度</div></div>
+        <div><div class="num" id="r-score">―</div><div class="lbl">安全スコア / 100</div></div>
+      </div>
+      <h3 class="sec">要因別評価（各20点・高いほど安全）</h3>
+      <div id="r-bars"></div>
+      <h3 class="sec">要因別コメント</h3>
+      <div id="r-comments"></div>
+      <h3 class="sec">総合コメント</h3>
+      <p class="comment-item" id="r-overall"></p>
+      <p class="note">※本診断書は、自己申告の回答に基づく簡易な傾向診断です。実際の運転技能の評価には、指導員が同乗する実技の安全運転スキル診断をご利用ください。</p>
+    </div>
+    <div class="noprint">
+      <button class="btn" onclick="window.print()">この診断書を印刷する</button>
+      <button class="btn sub" id="btn-retry">もう一度受ける</button>
+    </div>
+  </section>
+
+</div>
+<script>
+const FACTORS = ["車間距離","前方注視","速度管理","疲労・体調","悪天候・夜間"];
+const QUESTIONS = [
+  // 車間距離
+  {c:0,q:"渋滞や流れの悪い道で、前の車との間隔が詰まってしまう"},
+  {c:0,q:"前の車のブレーキランプが点いてから、自分のブレーキが遅れる"},
+  {c:0,q:"高速道路でも、つい車間を詰めて走ってしまう"},
+  {c:0,q:"信号待ちの列で、前の車に近づきすぎて止まってしまう"},
+  {c:0,q:"前の車が急に止まったら危ない、と感じる場面がある"},
+  {c:0,q:"割り込まれないよう、車間を狭めに保ってしまう"},
+  {c:0,q:"雨の日も、晴れた日と同じ車間距離で走ってしまう"},
+  {c:0,q:"前の車の先の様子が見えないまま、ついて走ることがある"},
+  // 前方注視
+  {c:1,q:"運転中にスマートフォンを見てしまう"},
+  {c:1,q:"カーナビの画面を、走行中に長く見てしまう"},
+  {c:1,q:"同乗者との会話で、前方から目を離してしまう"},
+  {c:1,q:"考えごとをしていて、前方の変化に気づくのが遅れる"},
+  {c:1,q:"景色や看板に気を取られてしまう"},
+  {c:1,q:"前の車ばかり見て、その先の信号や車列を見ていない"},
+  {c:1,q:"落とした物や操作ボタンに、走行中手を伸ばしてしまう"},
+  {c:1,q:"後方の車が気になって、ミラーを長く見てしまう"},
+  // 速度管理
+  {c:2,q:"黄色信号で、止まらずに進んでしまう"},
+  {c:2,q:"下り坂で、思ったより速度が出てしまう"},
+  {c:2,q:"急いでいるとき、いつもより速度を上げてしまう"},
+  {c:2,q:"前の車が遅いと、つい近づいて圧をかけてしまう"},
+  {c:2,q:"流れに乗ろうとして、制限速度を超えてしまう"},
+  {c:2,q:"見通しの悪い交差点でも、速度を落とさずに近づいてしまう"},
+  {c:2,q:"ブレーキを踏むタイミングが遅く、急ブレーキになることがある"},
+  {c:2,q:"カーブの手前で、十分に減速できていないことがある"},
+  // 疲労・体調
+  {c:3,q:"眠気を感じながら、運転を続けてしまう"},
+  {c:3,q:"長時間運転しても、休憩を取らずに走り続けてしまう"},
+  {c:3,q:"疲れているとき、反応が鈍くなっていると感じる"},
+  {c:3,q:"風邪薬などを飲んだあと、そのまま運転してしまう"},
+  {c:3,q:"睡眠不足のまま、運転することがある"},
+  {c:3,q:"運転中にあくびが何度も出ることがある"},
+  {c:3,q:"体調が悪くても、無理をして運転してしまう"},
+  {c:3,q:"夕方や深夜の運転で、集中力が落ちると感じる"},
+  // 悪天候・夜間
+  {c:4,q:"雨の日も、晴れた日と同じ速度で走ってしまう"},
+  {c:4,q:"雨の日の夜、路面や歩行者が見えにくいと感じることがある"},
+  {c:4,q:"夜間、対向車のライトで前が見えにくくなることがある"},
+  {c:4,q:"霧や豪雨でも、予定どおりの速度で走り続けてしまう"},
+  {c:4,q:"濡れた路面で、ブレーキの効きが遅いと感じることがある"},
+  {c:4,q:"夕暮れどきは、歩行者や自転車に気づくのが遅れる"},
+  {c:4,q:"夜間の運転で、距離感がつかみにくいと感じる"},
+  {c:4,q:"悪天候のときほど、早めに出発するなどの備えをしていない"}
+];
+const CHOICES = ["よくある","ときどきある","あまりない","まったくない"];
+const SCORE = [0,1,2,3];
+const COMMENTS = [
+  ["車間距離を保つ習慣ができています。追突防止の基本が守れています。","車間が詰まる場面があるようです。「前の車が止まっても止まれる距離」を意識しましょう。","車間距離の不足が目立ちます。追突事故の最大の原因です。速度に応じた十分な間隔を、今日から徹底しましょう。"],
+  ["前方への注視が安定しています。","前方から目を離す場面があるようです。スマホやナビの操作は、停車中に限るルールを徹底しましょう。","前方注視の不足が目立ちます。追突の多くは「見ていなかった」一瞬から起こります。運転への集中を取り戻しましょう。"],
+  ["速度管理が安定しています。","速度が上がりすぎる場面があるようです。急ぐときほど、早めの減速とブレーキを意識しましょう。","速度管理に課題が目立ちます。速度が高いほど止まれません。下り坂や交差点の手前では、早めの減速を徹底しましょう。"],
+  ["体調管理への意識が高いようです。","疲労の影響が出る場面があるようです。眠気を感じたら、ためらわず休憩を取りましょう。","疲労・体調の管理に課題が目立ちます。疲れた状態の運転は飲酒運転に近い危険があります。無理のない計画を立てましょう。"],
+  ["悪天候や夜間への備えができています。","天候や暗さへの対応が後手になる場面があるようです。雨の日と夜間は、いつもより速度を落としましょう。","悪天候・夜間への対応に課題が目立ちます。見えにくい状況では、速度を落として車間を広げることが身を守ります。"]
+];
+function levelOf(score){ return score>=16 ? 0 : score>=11 ? 1 : 2; }
+function riskOf(pct){
+  if(pct>=85) return "低い";
+  if(pct>=70) return "やや低い";
+  if(pct>=55) return "中";
+  if(pct>=40) return "高い";
+  return "非常に高い";
+}
+function overallOf(risk){
+  if(risk==="低い") return "追突事故の危険度は低い水準です。今の習慣（車間の確保・前方注視・早めの減速）を継続してください。";
+  if(risk==="やや低い") return "危険度はやや低めですが、一部の要因に改善点があります。当てはまった項目を意識して、さらに安全な運転を目指しましょう。";
+  if(risk==="中") return "危険度は中程度です。点数の低い要因は、追突事故に直結する内容です。日々の運転で重点的に改善に取り組みましょう。";
+  if(risk==="高い") return "危険度が高い状態です。特に車間距離と前方注視は、今日から改める必要があります。実技による運転適性診断の受講もおすすめします。";
+  return "危険度が非常に高い状態です。このままでは追突事故を起こす可能性が高いと言えます。運転習慣の根本的な見直しと、専門家による実技診断を強くおすすめします。";
+}
+// === DOM ===
+let answers = new Array(QUESTIONS.length).fill(null);
+let current = 0;
+const $ = id => document.getElementById(id);
+function show(id){ ["screen-start","screen-quiz","screen-result"].forEach(s => $(s).classList.toggle("hidden", s!==id)); }
+function renderQuestion(){
+  const item = QUESTIONS[current];
+  $("q-count").textContent = (current+1) + " / " + QUESTIONS.length;
+  $("q-bar").style.width = (current / QUESTIONS.length * 100) + "%";
+  $("q-cat").textContent = FACTORS[item.c];
+  $("q-text").textContent = item.q;
+  const box = $("q-choices"); box.innerHTML = "";
+  CHOICES.forEach((label, idx) => {
+    const b = document.createElement("button"); b.className = "choice"; b.textContent = label;
+    b.onclick = () => {
+      answers[current] = SCORE[idx];
+      if(current < QUESTIONS.length-1){ current++; renderQuestion(); } else { renderResult(); }
+    };
+    box.appendChild(b);
+  });
+  $("btn-back").style.visibility = current===0 ? "hidden" : "visible";
+}
+function renderResult(){
+  const raw = [0,0,0,0,0];
+  QUESTIONS.forEach((item,i)=>{ raw[item.c] += (answers[i] ?? 0); });
+  const scores = raw.map(v => Math.round(v/24*20));
+  const total = scores.reduce((a,b)=>a+b,0);
+  const risk = riskOf(total);
+  $("r-company").textContent = $("in-company").value.trim() || "―";
+  $("r-name").textContent = $("in-name").value.trim() || "―";
+  const d = new Date();
+  $("r-date").textContent = d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
+  $("r-risk").textContent = risk;
+  $("r-score").textContent = total;
+  const bars = $("r-bars"); bars.innerHTML = "";
+  scores.forEach((s,i)=>{
+    const row = document.createElement("div"); row.className = "bar-row";
+    row.innerHTML = '<span class="name"></span><span class="bar"><div style="width:' + (s/20*100) + '%"></div></span><span class="score">' + s + ' / 20点</span>';
+    row.querySelector(".name").textContent = FACTORS[i];
+    bars.appendChild(row);
+  });
+  const comments = $("r-comments"); comments.innerHTML = "";
+  scores.forEach((s,i)=>{
+    const p = document.createElement("p"); p.className = "comment-item";
+    const b = document.createElement("b"); b.textContent = FACTORS[i] + "：";
+    p.appendChild(b); p.appendChild(document.createTextNode(COMMENTS[i][levelOf(s)]));
+    comments.appendChild(p);
+  });
+  $("r-overall").textContent = overallOf(risk);
+  show("screen-result"); window.scrollTo(0,0);
+}
+$("btn-start").onclick = () => { current = 0; show("screen-quiz"); renderQuestion(); };
+$("btn-back").onclick = () => { if(current>0){ current--; renderQuestion(); } };
+$("btn-retry").onclick = () => { answers = new Array(QUESTIONS.length).fill(null); show("screen-start"); window.scrollTo(0,0); };
+const params = new URLSearchParams(location.search);
+if(params.get("company")){ $("in-company").value = params.get("company"); }
+</script>
+</body>
+</html>
